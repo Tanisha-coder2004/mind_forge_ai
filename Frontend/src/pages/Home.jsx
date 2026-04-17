@@ -11,7 +11,7 @@ const Home = () => {
   return (
     <div className='w-full overflow-hidden bg-[#E8F6F3] '>
       
-      <div className="w-full relative" >
+      <div className="w-full relative " >
        <Nav />
         <Hero />
       </div>

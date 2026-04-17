@@ -61,8 +61,8 @@ const Nav = () => {
 
           {userData?.role === "educator" && (
             <div
-              className="px-5 py-2.5 border-2 border-white 
-             text-white bg-yellow-400 rounded-3xl text-[18px] font-light
+              className="px-5 py-2.5   
+             text-black bg-yellow-400 rounded-3xl text-[18px] font-light
               cursor-pointer" onClick={()=>navigate("/dashboard")}
             >
               Dashboard

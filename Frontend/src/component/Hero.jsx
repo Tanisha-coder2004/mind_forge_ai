@@ -1,7 +1,9 @@
 import React from 'react'
 import hero from "../assets/hero-img.png"
 import { SiViaplay } from "react-icons/si";
+import { useNavigate } from 'react-router-dom';
 const Hero = () => {
+    const navigate = useNavigate()
     return (
         <section className='bg-[#093B3B] mx-10 mt-24 lg:min-h-[70vh] rounded-[20px] overflow-hidden'>
             <div className='max-w-[1400px] mx-auto px-6 flex md:flex-row flex-col items-center md:pt-10 pt-15'>
@@ -20,7 +22,7 @@ const Hero = () => {
                     <div className='flex items-center gap-4 pt-4'>
 
                         <button className='px-5 py-3 bg-[#FDC332] text-black font-bold text-[18px] rounded-full cursor-pointer 
-                            hover:bg-yellow-500 transition-all flex items-center justify-center gap-2'>
+                            hover:bg-yellow-500 transition-all flex items-center justify-center gap-2'  onClick={()=>navigate("/allCourses")}>
                             View all Courses <SiViaplay className='w-5 h-5'/>
                         </button>
                         
