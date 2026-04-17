@@ -68,7 +68,7 @@ export const editCourse = async(req,res)=>{
             message:"course is not found"
            })
       }
-      const updateData = {title,subTitle,description,category,level,isPublished,price}
+      const updateData = {title,subTitle,description,category,level,isPublished,price,thumbnail}
       course = await Course.findByIdAndUpdate(courseId,updateData,{new:true})
       return res.status(200).json(course)
 

@@ -11,7 +11,7 @@ import { BsClipboardData } from "react-icons/bs";
 
 export const ExploreCourses = () => {
   return (
-    <div className=" w-full min-h-[50vh] flex flex-col lg:flex-row items-center gap-4 px-6">
+    <div className=" w-full min-h-[50vh] flex flex-col lg:flex-row items-center gap-4 px-6 border">
       {/* left div */}
       <div
         className="w-full lg:w-[35%] lg:h-full h-[400px] flex ml-1
