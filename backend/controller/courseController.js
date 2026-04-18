@@ -1,5 +1,6 @@
 import uploadOnCloudinary from "../config/cloudinary.js";
 import Course from "../model/courseModel.js";
+import Lecture from "../model/lectureModel.js";
 export const createCourse = async(req,res)=>{
     try {
         const {title,category} = req.body;
@@ -116,3 +117,98 @@ export const removeCourse = async(req,res)=>{
         })
     }
 }
+
+export const addLecture = async (req, res) => {
+    const { courseId } = req.params;
+    const { title,isPreviewFree} = req.body;
+   if (!title) return res.status(400).json({ message: "Title is required" });
+
+    // 1. Create Lecture
+   const lecture = await Lecture.create({ 
+            title, 
+            courseId,
+            isPreviewFree: isPreviewFree || false // Default false agar nahi bheja toh
+        });
+
+    // 2. Update Course
+    await Course.findByIdAndUpdate(courseId, {
+        $push: { lectures: lecture._id }
+    });
+
+    res.status(201).json({ message: "Lecture added successfully!" });
+};
+
+
+export const updateLecture = async (req, res) => {
+    try {
+        const { lectureId } = req.params;
+        const { title, isPreviewFree } = req.body;
+        
+        let updateData = { title, isPreviewFree };
+
+        // Agar video file aayi hai toh upload karo
+        if (req.file) {
+            const videoUrl = await uploadOnCloudinary(req.file.path);
+            if (videoUrl) {
+                updateData.videoUrl = videoUrl;
+            }
+        }
+
+        const updatedLecture = await Lecture.findByIdAndUpdate(
+            lectureId, 
+            updateData, 
+            { new: true }
+        );
+
+        res.status(200).json({ message: "Lecture updated successfully!", updatedLecture });
+    } catch (error) {
+        res.status(500).json({ message: "Error updating lecture" });
+    }
+};
+
+
+export const deleteLecture = async (req, res) => {
+    try {
+        const { lectureId, courseId } = req.params;
+
+        // 1. Database se lecture delete karo
+        const lecture = await Lecture.findByIdAndDelete(lectureId);
+
+        if (!lecture) {
+            return res.status(404).json({ message: "Lecture not found" });
+        }
+
+        // 2. Course ke lectures array se is ID ko remove karo
+        await Course.findByIdAndUpdate(courseId, {
+            $pull: { lectures: lectureId } // $pull array se specific item hatata hai
+        });
+
+        res.status(200).json({ message: "Lecture deleted successfully from DB" });
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Error deleting lecture" });
+    }
+};
+
+export const getCourseLectures = async (req, res) => {
+    try {
+        const { courseId } = req.params;
+
+        // Hum Course model mein lectures populate bhi kar sakte hain 
+        // ya directly Lecture model se filter kar sakte hain.
+        const lectures = await Lecture.find({ courseId: courseId });
+
+        if (!lectures || lectures.length === 0) {
+            return res.status(404).json({ message: "No lectures found for this course" });
+        }
+
+        res.status(200).json({ 
+            success: true, 
+            lectures 
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Error fetching lectures" });
+    }
+};

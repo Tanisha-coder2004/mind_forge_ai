@@ -110,7 +110,7 @@ const handleCancel = async ()=>{
           // className="absolute top-[-20%] left-0 z-20 cursor-pointer"
         />
         {/* <h3>Add detail information regarding course</h3> */}
-        <button className="bg-black text-white px-4 py-2 rounded-md">Go to lecture page</button>
+        <button className="bg-black text-white px-4 py-2 rounded-md" onClick={()=>navigate(`/createLectures/${selectCourseData?._id}`)}>Go to lecture page</button>
       </div>
       {/* form details */}
       <div className="bg-gray-50 p-6 rounded-md">
